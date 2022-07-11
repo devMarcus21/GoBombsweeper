@@ -2,6 +2,7 @@ package game
 
 import "errors"
 
+// Implements ISpace interface used to represent bomb space on a board
 type BombSpace struct {
 	revealed bool
 }

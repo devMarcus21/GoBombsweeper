@@ -1,5 +1,6 @@
 package game
 
+// Implements ISpace interface used to represent space on a board
 type Space struct {
 	adjacentBombs int
 	revealed      bool

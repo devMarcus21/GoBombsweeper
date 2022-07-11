@@ -1,5 +1,6 @@
 package game
 
+// Implements IGame interface
 type Game struct {
 	board [][]ISpace
 	done  bool
