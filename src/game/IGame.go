@@ -1,5 +1,5 @@
 package game
 
 type IGame interface {
-	addBomb(int, int) bool
+	AddBomb(int, int) bool
 }
