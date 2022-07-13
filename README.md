@@ -1,6 +1,6 @@
 # GoBombsweeper
 
-## about
+## About
 
 This is a fun personal project I decided to do to learn Go
 
@@ -8,7 +8,7 @@ I think Go is a very cool and unique language unlike anything else out there and
 
 As a Go noob, I thought it would be a good idea to implement GoBombsweeper as a trivial starter project which I can easily scale the complexity of
 
-## features
+## Features
 
 - I want to be able to create and play an instance of the game
 - Unit tests will be an important part of this project
@@ -20,7 +20,7 @@ As a Go noob, I thought it would be a good idea to implement GoBombsweeper as a 
 - View a move history for each game
 - Host this as a service on a cloud provider (more than likely not)
 
-## iterations
+## Iterations
 
 I will be dividing this project into 3 main iterations
 
