@@ -21,7 +21,19 @@ func CreateGame(row int, col int) *Game {
 	return &Game{board, false, false}
 }
 
-func (game *Game) AddBomb(row int, col int) bool {
+func (game Game) AddBomb(row int, col int) bool {
 	game.board[row][col] = CreateBombSpace()
 	return true
+}
+
+func (game Game) HasGameFinished() bool {
+	return game.done
+}
+
+func (game Game) GameWon() bool {
+	return game.won
+}
+
+func (game *Game) GetBoardState() [][]ISpace {
+	return game.board
 }

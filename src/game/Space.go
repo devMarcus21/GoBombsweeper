@@ -6,20 +6,24 @@ type Space struct {
 	revealed      bool
 }
 
-func CreateSpace() Space {
-	return Space{0, false}
+func CreateSpace() *Space {
+	return &Space{0, false}
 }
 
-func (space Space) ShowSpace() error {
+func (space *Space) ShowSpace() error {
 	space.revealed = true
 	return nil
 }
 
-func (space Space) IsRevealed() bool {
+func (space *Space) IsRevealed() bool {
 	return space.revealed
 }
 
-func (space Space) SetAdjacent(adjCount int) bool {
+func (space *Space) SetAdjacent(adjCount int) bool {
 	space.adjacentBombs = adjCount
 	return true
+}
+
+func (space *Space) GetAdjacentBombs() int {
+	return space.adjacentBombs
 }
