@@ -44,6 +44,17 @@ func (game Game) AddBomb(row int, col int) (error, bool) {
 	return errors.New("Space already has bomb"), false
 }
 
+func (game Game) GetSpaceState(row int, col int) (error, ISpace) {
+	if game.rowLength <= row || row < 0 {
+		return errors.New("Row index invalid: "+strconv.Itoa(row)), nil
+	}
+	if game.colLength <= col || col < 0 {
+		return errors.New("Column index invalid: "+strconv.Itoa(col)), nil
+	}
+
+	return nil, game.board[row][col]
+}
+
 func (game Game) HasGameFinished() bool {
 	return game.done
 }

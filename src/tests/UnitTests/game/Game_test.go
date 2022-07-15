@@ -19,8 +19,8 @@ func TestShouldCreateASmallNewGame(t *testing.T) {
 	gameRowLen, gameColLen := game.GetBoardDimensions()
 
 	assert.Equal(t, expectedBoard, game.GetBoardState(), "Board state should be equal")
-	assert.False(t, game.GameWon(), "Win state should be equal")
-	assert.False(t, game.HasGameFinished(), "Finished state should be equal")
+	assert.False(t, game.GameWon(), "Win state should be false")
+	assert.False(t, game.HasGameFinished(), "Finished state should be false")
 	assert.Equal(t, row, gameRowLen, "Row dimension is equal")
 	assert.Equal(t, col, gameColLen, "Column dimension is equal")
 }
@@ -96,6 +96,87 @@ func TestShouldNotAddBombToBoard_ColIndexOutOfBounds(t *testing.T) {
 	assert.NotNil(t, err, "Error returned")
 	assert.Equal(t, expectedError, err, "Errors are equal")
 	assert.False(t, result, "Bomb was not added")
+}
+
+func TestShouldGetSpaceStateAtIndex(t *testing.T) {
+	gm := game.CreateGame(8, 8)
+
+	err, space := gm.GetSpaceState(1, 1)
+	_, ISpaceIsSpace := space.(*game.Space)
+
+	assert.Nil(t, err, "No error returned")
+	// verify the state of the space
+	assert.True(t, ISpaceIsSpace, "ISpace returned is a Space")
+	assert.False(t, space.IsRevealed(), "Space should not be revealed")
+	assert.Equal(t, 0, space.GetAdjacentBombs(), "Space should have no adjacent bombs")
+}
+
+func TestShouldGetBombSpaceStateAtIndex(t *testing.T) {
+	gm := game.CreateGame(8, 8)
+	row := 1
+	col := 1
+
+	gm.AddBomb(row, col)
+	err, space := gm.GetSpaceState(row, col)
+	_, ISpaceIsSpace := space.(*game.BombSpace)
+
+	assert.Nil(t, err, "No error returned")
+	// verify the state of the space
+	assert.True(t, ISpaceIsSpace, "ISpace returned is a BombSpace")
+	assert.False(t, space.IsRevealed(), "Space should not be revealed")
+	assert.Equal(t, 0, space.GetAdjacentBombs(), "Space should have no adjacent bombs")
+}
+
+func TestShouldNotGetSpaceStateAtIndex_RowIndexLess0(t *testing.T) {
+	game := game.CreateGame(8, 8)
+	row := -1
+	col := 0
+	expectedError := errors.New("Row index invalid: "+strconv.Itoa(row))
+
+	err, space := game.GetSpaceState(row, col)
+
+	assert.Nil(t, space, "No ISpace was returned")
+	assert.NotNil(t, err, "Error is not nil")
+	assert.Equal(t, expectedError, err, "Errors are equal")
+}
+
+func TestShouldNotGetSpaceStateAtIndex_RowIndexOutOfBounds(t *testing.T) {
+	game := game.CreateGame(8, 8)
+	row := 9
+	col := 0
+	expectedError := errors.New("Row index invalid: "+strconv.Itoa(row))
+
+	err, space := game.GetSpaceState(row, col)
+
+	assert.Nil(t, space, "No ISpace was returned")
+	assert.NotNil(t, err, "Error is not nil")
+	assert.Equal(t, expectedError, err, "Errors are equal")
+}
+
+func TestShouldNotGetSpaceStateAtIndex_ColIndexLess0(t *testing.T) {
+	game := game.CreateGame(8, 8)
+	row := 0
+	col := -1
+	expectedError := errors.New("Column index invalid: "+strconv.Itoa(col))
+
+	err, space := game.GetSpaceState(row, col)
+
+	assert.Nil(t, space, "No ISpace was returned")
+	assert.NotNil(t, err, "Error is not nil")
+	assert.Equal(t, expectedError, err, "Errors are equal")
+}
+
+func TestShouldNotGetSpaceStateAtIndex_ColIndexOutOfBounds(t *testing.T) {
+	game := game.CreateGame(8, 8)
+	row := 0
+	col := 9
+	expectedError := errors.New("Column index invalid: "+strconv.Itoa(col))
+
+	err, space := game.GetSpaceState(row, col)
+
+	assert.Nil(t, space, "No ISpace was returned")
+	assert.NotNil(t, err, "Error is not nil")
+	assert.Equal(t, expectedError, err, "Errors are equal")
 }
 
 func buildBoard(row int, col int) [][]game.ISpace {
