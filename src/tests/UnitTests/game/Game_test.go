@@ -26,12 +26,19 @@ func TestShouldCreateASmallNewGame(t *testing.T) {
 }
 
 func TestShouldAddBombToBoard(t *testing.T) {
-	game := game.CreateGame(8, 8)
-
-	err, result := game.AddBomb(1,1)
+	gm := game.CreateGame(8, 8)
+	row := 1
+	col := 1
+	
+	err, result := gm.AddBomb(row, col)
+	getErr, space := gm.GetSpaceState(row, col)
+	_, ISpaceIsBombSpace := space.(*game.BombSpace)
 
 	assert.Nil(t, err, "No error returned")
 	assert.True(t, result, "Bomb was added")
+
+	assert.Nil(t, getErr, "No error when getting space state")
+	assert.True(t, ISpaceIsBombSpace, "Space is now a bomb space")
 }
 
 func TestShouldNotAddBombToBoard_SpaceAlreadyBomb(t *testing.T) {
@@ -118,11 +125,11 @@ func TestShouldGetBombSpaceStateAtIndex(t *testing.T) {
 
 	gm.AddBomb(row, col)
 	err, space := gm.GetSpaceState(row, col)
-	_, ISpaceIsSpace := space.(*game.BombSpace)
+	_, ISpaceIsBombSpace := space.(*game.BombSpace)
 
 	assert.Nil(t, err, "No error returned")
 	// verify the state of the space
-	assert.True(t, ISpaceIsSpace, "ISpace returned is a BombSpace")
+	assert.True(t, ISpaceIsBombSpace, "ISpace returned is a BombSpace")
 	assert.False(t, space.IsRevealed(), "Space should not be revealed")
 	assert.Equal(t, 0, space.GetAdjacentBombs(), "Space should have no adjacent bombs")
 }

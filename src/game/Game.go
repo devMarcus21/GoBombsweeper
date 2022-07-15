@@ -28,7 +28,7 @@ func CreateGame(row int, col int) *Game {
 	return &Game{board, false, false, row, col}
 }
 
-func (game Game) AddBomb(row int, col int) (error, bool) {
+func (game *Game) AddBomb(row int, col int) (error, bool) {
 	if game.rowLength <= row || row < 0 {
 		return errors.New("Row index invalid: "+strconv.Itoa(row)), false
 	}
