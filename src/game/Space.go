@@ -27,3 +27,8 @@ func (space *Space) SetAdjacent(adjCount int) bool {
 func (space *Space) GetAdjacentBombs() int {
 	return space.adjacentBombs
 }
+
+func (space *Space) IncrementAdjacentBombs() bool {
+	space.adjacentBombs++
+	return true
+}

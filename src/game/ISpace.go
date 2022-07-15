@@ -5,4 +5,5 @@ type ISpace interface {
 	IsRevealed() bool
 	SetAdjacent(int) bool
 	GetAdjacentBombs() int
+	IncrementAdjacentBombs() bool
 }

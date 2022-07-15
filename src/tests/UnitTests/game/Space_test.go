@@ -34,3 +34,13 @@ func TestShowSpace(t *testing.T) {
 	assert.Equal(t, nil, err, "No error returned")
 	assert.True(t, space.IsRevealed(), "Space should be revealed and return false")
 }
+
+func TestShouldIncrementAdjacentBombsSpaceA(t *testing.T) {
+	space := game.CreateSpace()
+
+	assert.Equal(t, 0, space.GetAdjacentBombs(), "Should be no adjacentBombs")
+
+	space.IncrementAdjacentBombs()
+
+	assert.Equal(t, 1, space.GetAdjacentBombs(), "Should be 1 adjacentBomb")
+}
