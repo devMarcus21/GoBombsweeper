@@ -28,6 +28,27 @@ func CreateGame(row int, col int) *Game {
 	return &Game{board, false, false, row, col}
 }
 
+func (game *Game) SelectBombAtIndex(row int, col int) (error, bool) {
+	if game.rowLength <= row || row < 0 {
+		return errors.New("Row index invalid: "+strconv.Itoa(row)), false
+	}
+	if game.colLength <= col || col < 0 {
+		return errors.New("Column index invalid: "+strconv.Itoa(col)), false
+	}
+
+	if game.board[row][col].IsRevealed() {
+		return nil, false
+	}
+
+	err := game.board[row][col].ShowSpace()
+
+	if err != nil {
+		return err, false
+	}
+
+	return nil, true
+}
+
 func (game *Game) AddBomb(row int, col int) (error, bool) {
 	if game.rowLength <= row || row < 0 {
 		return errors.New("Row index invalid: "+strconv.Itoa(row)), false

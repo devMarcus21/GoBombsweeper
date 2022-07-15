@@ -8,4 +8,5 @@ type IGame interface {
 	GetBoardDimensions() (int, int)
 	IncrementAdjacentBombsAtIndex(int, int) (error, bool)
 	GetSpaceState(int, int) (error, ISpace)
+	SelectBombAtIndex(int, int) (error, bool)
 }

@@ -215,3 +215,58 @@ func TestShouldIncrementAdjacentBombsAtIndex(t *testing.T) {
 	assert.True(t, result, "Should return true")
 	assert.Equal(t, 1, spaceAfter.GetAdjacentBombs(), "adjacentBombs should have been incremented")
 }
+
+func TestShouldSelectBombAtIndex(t *testing.T) {
+	game := game.CreateGame(8, 8)
+	row := 1
+	col := 1
+
+	_, spaceBefore := game.GetSpaceState(row, col)
+
+	assert.False(t, spaceBefore.IsRevealed(), "Should not be revealed yet")
+	err, result := game.SelectBombAtIndex(row, col)
+
+	_, spaceAfter := game.GetSpaceState(row, col)
+
+	assert.Nil(t, err, "Should not return error")
+	assert.True(t, result, "Should return true")
+	assert.True(t, spaceAfter.IsRevealed(), "Should reveal space")
+}
+
+func TestShouldNotSelectBombAtIndex_SpaceSelectedAlready(t *testing.T) {
+	game := game.CreateGame(8, 8)
+	row := 1
+	col := 1
+
+	game.SelectBombAtIndex(row, col)
+	_, spaceBefore := game.GetSpaceState(row, col)
+
+	assert.True(t, spaceBefore.IsRevealed(), "Should be revealed")
+	err, result := game.SelectBombAtIndex(row, col)
+
+	_, spaceAfter := game.GetSpaceState(row, col)
+
+	assert.Nil(t, err, "Should not return error")
+	assert.False(t, result, "Should return False")
+	assert.True(t, spaceAfter.IsRevealed(), "Should still be revealed space")
+}
+
+func TestShouldNotSelectBombAtIndex_BombSpace(t *testing.T) {
+	game := game.CreateGame(8, 8)
+	row := 1
+	col := 1
+	expectedError := errors.New("Bomb space selected")
+	game.AddBomb(row, col) // Add bomb space at index
+
+	_, spaceBefore := game.GetSpaceState(row, col)
+
+	assert.False(t, spaceBefore.IsRevealed(), "Should not be revealed yet")
+	err, result := game.SelectBombAtIndex(row, col)
+
+	_, spaceAfter := game.GetSpaceState(row, col)
+
+	assert.NotNil(t, err, "Should return error")
+	assert.Equal(t, expectedError, err, "Error should be expected")
+	assert.False(t, result, "Should return False")
+	assert.True(t, spaceAfter.IsRevealed(), "Should reveal space")
+}
