@@ -23,6 +23,7 @@ func TestShouldRevealSpace(t *testing.T) {
 
 	err := space.ShowSpace()
 
+	assert.Nil(t, err, "Should be no error")
 	assert.True(t, space.IsRevealed(), "Space should be revealed")
 }
 
