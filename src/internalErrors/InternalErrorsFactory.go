@@ -21,12 +21,12 @@ func BuildInvalidColumnSize(size int) error {
 	return errors.New("Column index invalid: " + strconv.Itoa(size))
 }
 
-func BuildBombCountToSmall(count int) error {
+func BuildBombCountToSmall() error {
 	return errors.New("bombCount cannot be less than zero")
 }
 
 func BuildBombCountToLarge(count int) error {
-	return errors.New("bombCount cannot greater than half the area of the board")
+	return errors.New("bombCount cannot greater than half the area of the board: " + strconv.Itoa(count))
 }
 
 func BuildSpaceAlreadyHasBomb() error {

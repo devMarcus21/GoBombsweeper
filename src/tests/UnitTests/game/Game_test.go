@@ -1,4 +1,4 @@
-package Game
+package GameTests
 
 import (
 	"testing"
