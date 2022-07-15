@@ -6,6 +6,6 @@ type IGame interface {
 	GameWon() bool
 	GetBoardState() [][]ISpace
 	GetBoardDimensions() (int, int)
-	SetAdjacentBombs(int, int, int)
+	IncrementAdjacentBombsAtIndex(int, int) (error, bool)
 	GetSpaceState(int, int) (error, ISpace)
 }

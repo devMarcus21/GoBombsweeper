@@ -25,6 +25,20 @@ func TestShouldCreateASmallNewGame(t *testing.T) {
 	assert.Equal(t, col, gameColLen, "Column dimension is equal")
 }
 
+func buildBoard(row int, col int) [][]game.ISpace {
+	board := make([][]game.ISpace, row)
+
+	for r := range board {
+		boardRow := make([]game.ISpace, col)
+		for c := range boardRow {
+			boardRow[c] = game.CreateSpace()
+		}
+		board[r] = boardRow
+	}
+
+	return board
+}
+
 func TestShouldAddBombToBoard(t *testing.T) {
 	gm := game.CreateGame(8, 8)
 	row := 1
@@ -186,16 +200,18 @@ func TestShouldNotGetSpaceStateAtIndex_ColIndexOutOfBounds(t *testing.T) {
 	assert.Equal(t, expectedError, err, "Errors are equal")
 }
 
-func buildBoard(row int, col int) [][]game.ISpace {
-	board := make([][]game.ISpace, row)
+func TestShouldIncrementAdjacentBombsAtIndex(t *testing.T) {
+	game := game.CreateGame(8, 8)
+	row := 1
+	col := 1
 
-	for r := range board {
-		boardRow := make([]game.ISpace, col)
-		for c := range boardRow {
-			boardRow[c] = game.CreateSpace()
-		}
-		board[r] = boardRow
-	}
+	_, spaceBefore := game.GetSpaceState(row, col)
+	assert.Equal(t, 0, spaceBefore.GetAdjacentBombs(), "adjacentBombs should be 0")
 
-	return board
+	err, result := game.IncrementAdjacentBombsAtIndex(row, row)
+	_, spaceAfter := game.GetSpaceState(row, col)
+
+	assert.Nil(t, err, "Should not return error")
+	assert.True(t, result, "Should return true")
+	assert.Equal(t, 1, spaceAfter.GetAdjacentBombs(), "adjacentBombs should have been incremented")
 }

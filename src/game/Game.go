@@ -44,6 +44,19 @@ func (game *Game) AddBomb(row int, col int) (error, bool) {
 	return errors.New("Space already has bomb"), false
 }
 
+func (game *Game) IncrementAdjacentBombsAtIndex(row int, col int) (error, bool) {
+	if game.rowLength <= row || row < 0 {
+		return errors.New("Row index invalid: "+strconv.Itoa(row)), false
+	}
+	if game.colLength <= col || col < 0 {
+		return errors.New("Column index invalid: "+strconv.Itoa(col)), false
+	}
+
+	adjacentBombsIncremented := game.board[row][col].IncrementAdjacentBombs()
+
+	return nil, adjacentBombsIncremented
+}
+
 func (game Game) GetSpaceState(row int, col int) (error, ISpace) {
 	if game.rowLength <= row || row < 0 {
 		return errors.New("Row index invalid: "+strconv.Itoa(row)), nil
