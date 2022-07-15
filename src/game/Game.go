@@ -1,10 +1,17 @@
 package game
 
+import (
+	"errors"
+	"strconv"
+)
+
 // Implements IGame interface
 type Game struct {
 	board [][]ISpace
 	done  bool
 	won   bool
+	rowLength int
+	colLength int
 }
 
 func CreateGame(row int, col int) *Game {
@@ -18,12 +25,23 @@ func CreateGame(row int, col int) *Game {
 		board[r] = boardRow
 	}
 
-	return &Game{board, false, false}
+	return &Game{board, false, false, row, col}
 }
 
-func (game Game) AddBomb(row int, col int) bool {
-	game.board[row][col] = CreateBombSpace()
-	return true
+func (game Game) AddBomb(row int, col int) (error, bool) {
+	if game.rowLength <= row || row < 0 {
+		return errors.New("Row index invalid: "+strconv.Itoa(row)), false
+	}
+	if game.colLength <= col || col < 0 {
+		return errors.New("Column index invalid: "+strconv.Itoa(col)), false
+	}
+
+	if _, ok := game.board[row][col].(*Space); ok {
+		game.board[row][col] = CreateBombSpace()
+		return nil, true
+	}
+
+	return errors.New("Space already has bomb"), false
 }
 
 func (game Game) HasGameFinished() bool {
@@ -36,4 +54,8 @@ func (game Game) GameWon() bool {
 
 func (game *Game) GetBoardState() [][]ISpace {
 	return game.board
+}
+
+func (game *Game) GetBoardDimensions() (int, int) {
+	return game.rowLength, game.colLength
 }
