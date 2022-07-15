@@ -1,12 +1,11 @@
 package Game
 
 import (
-	"errors"
-	"strconv"
 	"testing"
 
 	"github.com/devMarcus21/GoBombsweeper/src/game"
 	"github.com/stretchr/testify/assert"
+	"github.com/devMarcus21/GoBombsweeper/src/internalErrors"
 )
 
 func TestShouldCreateASmallNewGame(t *testing.T) {
@@ -57,13 +56,13 @@ func TestShouldAddBombToBoard(t *testing.T) {
 
 func TestShouldNotAddBombToBoard_SpaceAlreadyBomb(t *testing.T) {
 	game := game.CreateGame(8, 8)
-	expectedError := errors.New("Space already has bomb")
+	expectedError := internalErrors.BuildSpaceAlreadyHasBomb()
 
 	game.AddBomb(1,1)
 	err, result := game.AddBomb(1,1)
 
 	assert.NotNil(t, err, "Error returned")
-	assert.Equal(t, expectedError, err, "Erros are equal")
+	assert.Equal(t, expectedError, err, "Errors are equal")
 	assert.False(t, result, "Bomb was not added")
 }
 
@@ -71,7 +70,7 @@ func TestShouldNotAddBombToBoard_RowIndexLess0(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := -1
 	col := 0
-	expectedError := errors.New("Row index invalid: "+strconv.Itoa(row))
+	expectedError := internalErrors.BuildInvalidRowIndex(row)
 
 	err, result := game.AddBomb(row, col)
 
@@ -84,7 +83,7 @@ func TestShouldNotAddBombToBoard_RowIndexOutOfBounds(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := 9
 	col := 0
-	expectedError := errors.New("Row index invalid: "+strconv.Itoa(row))
+	expectedError := internalErrors.BuildInvalidRowIndex(row)
 
 	err, result := game.AddBomb(row, col)
 
@@ -97,7 +96,7 @@ func TestShouldNotAddBombToBoard_ColIndexLess0(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := 0
 	col := -1
-	expectedError := errors.New("Column index invalid: "+strconv.Itoa(col))
+	expectedError := internalErrors.BuildInvalidColumnIndex(col)
 
 	err, result := game.AddBomb(row, col)
 
@@ -110,7 +109,7 @@ func TestShouldNotAddBombToBoard_ColIndexOutOfBounds(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := 0
 	col := 9
-	expectedError := errors.New("Column index invalid: "+strconv.Itoa(col))
+	expectedError := internalErrors.BuildInvalidColumnIndex(col)
 
 	err, result := game.AddBomb(row, col)
 
@@ -152,7 +151,7 @@ func TestShouldNotGetSpaceStateAtIndex_RowIndexLess0(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := -1
 	col := 0
-	expectedError := errors.New("Row index invalid: "+strconv.Itoa(row))
+	expectedError := internalErrors.BuildInvalidRowIndex(row)
 
 	err, space := game.GetSpaceState(row, col)
 
@@ -165,7 +164,7 @@ func TestShouldNotGetSpaceStateAtIndex_RowIndexOutOfBounds(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := 9
 	col := 0
-	expectedError := errors.New("Row index invalid: "+strconv.Itoa(row))
+	expectedError := internalErrors.BuildInvalidRowIndex(row)
 
 	err, space := game.GetSpaceState(row, col)
 
@@ -178,7 +177,7 @@ func TestShouldNotGetSpaceStateAtIndex_ColIndexLess0(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := 0
 	col := -1
-	expectedError := errors.New("Column index invalid: "+strconv.Itoa(col))
+	expectedError := internalErrors.BuildInvalidColumnIndex(col)
 
 	err, space := game.GetSpaceState(row, col)
 
@@ -191,7 +190,7 @@ func TestShouldNotGetSpaceStateAtIndex_ColIndexOutOfBounds(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := 0
 	col := 9
-	expectedError := errors.New("Column index invalid: "+strconv.Itoa(col))
+	expectedError := internalErrors.BuildInvalidColumnIndex(col)
 
 	err, space := game.GetSpaceState(row, col)
 
@@ -255,7 +254,7 @@ func TestShouldNotSelectBombAtIndex_BombSpace(t *testing.T) {
 	game := game.CreateGame(8, 8)
 	row := 1
 	col := 1
-	expectedError := errors.New("Bomb space selected")
+	expectedError := internalErrors.BuildBombSpaceSelected()
 	game.AddBomb(row, col) // Add bomb space at index
 
 	_, spaceBefore := game.GetSpaceState(row, col)

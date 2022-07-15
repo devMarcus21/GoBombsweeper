@@ -1,6 +1,6 @@
 package game
 
-import "errors"
+import "github.com/devMarcus21/GoBombsweeper/src/internalErrors"
 
 // Implements ISpace interface used to represent bomb space on a board
 type BombSpace struct {
@@ -13,7 +13,7 @@ func CreateBombSpace() *BombSpace {
 
 func (space *BombSpace) ShowSpace() error {
 	space.revealed = true
-	return errors.New("Bomb space selected")
+	return internalErrors.BuildBombSpaceSelected()
 }
 
 func (space *BombSpace) IsRevealed() bool {
