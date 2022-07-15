@@ -16,6 +16,16 @@ func TestShouldCreateANewSpace(t *testing.T) {
 	assert.False(t, space.IsRevealed(), "Space should not be revealed and return false")
 }
 
+func TestShouldRevealSpace(t *testing.T) {
+	space := game.CreateSpace()
+
+	assert.False(t, space.IsRevealed(), "Space should not be yet revealed")
+
+	err := space.ShowSpace()
+
+	assert.True(t, space.IsRevealed(), "Space should be revealed")
+}
+
 func TestShowSpace(t *testing.T) {
 	space := game.CreateSpace()
 	err := space.ShowSpace()
