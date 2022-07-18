@@ -31,3 +31,7 @@ func (space *BombSpace) GetAdjacentBombs() int {
 func (space *BombSpace) IncrementAdjacentBombs() bool {
 	return false
 }
+
+func (space BombSpace) String() string {
+	return "#"
+}

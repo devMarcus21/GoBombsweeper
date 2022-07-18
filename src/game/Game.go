@@ -25,7 +25,7 @@ func CreateGame(row int, col int) *Game {
 	return &Game{board, false, false, row, col}
 }
 
-func (game *Game) SelectBombAtIndex(row int, col int) (error, bool) {
+func (game *Game) SelectAtIndex(row int, col int) (error, bool) {
 	if game.rowLength <= row || row < 0 {
 		return internalErrors.BuildInvalidRowIndex(row), false
 	}

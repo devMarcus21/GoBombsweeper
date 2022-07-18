@@ -1,5 +1,7 @@
 package game
 
+import "strconv"
+
 // Implements ISpace interface used to represent space on a board
 type Space struct {
 	adjacentBombs int
@@ -31,4 +33,8 @@ func (space *Space) GetAdjacentBombs() int {
 func (space *Space) IncrementAdjacentBombs() bool {
 	space.adjacentBombs++
 	return true
+}
+
+func (space Space) String() string {
+	return strconv.Itoa(space.adjacentBombs)
 }
