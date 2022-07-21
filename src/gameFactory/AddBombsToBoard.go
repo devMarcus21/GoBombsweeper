@@ -46,12 +46,25 @@ func AddBombsToBoard(game *game.Game, numBombs int, rowSize int, colSize int) bo
 	return true
 }
 
-// TODO AddBombsIfValidAndFillAdjacent
-func AddBombsIfValid(game *game.Game, row int, col int) bool {
+func AddBombsIfValid(gm *game.Game, row int, col int) bool {
 
-	_, result := game.AddBomb(row, col)
+	// Increments surrounding 8 spots by 1
+	// Methods handles bounds checking
+	fillAdjacentSpaceWithBombCount := func(refGame *game.Game, r int, c int) {
+		refGame.IncrementAdjacentBombsAtIndex(r, c+1)
+		refGame.IncrementAdjacentBombsAtIndex(r, c-1)
+		refGame.IncrementAdjacentBombsAtIndex(r+1, c)
+		refGame.IncrementAdjacentBombsAtIndex(r+1, c-1)
+		refGame.IncrementAdjacentBombsAtIndex(r+1, c+1)
+		refGame.IncrementAdjacentBombsAtIndex(r-1, c)
+		refGame.IncrementAdjacentBombsAtIndex(r-1, c-1)
+		refGame.IncrementAdjacentBombsAtIndex(r-1, c+1)
+	}
 
-	// TODO Implement ability to fill adjacent spots so that nearby spaces will have adjacent bombs incremented
+	if _, result := gm.AddBomb(row, col); result {
+		fillAdjacentSpaceWithBombCount(gm, row, col)
+		return true
+	}
 
-	return result
+	return false
 }
