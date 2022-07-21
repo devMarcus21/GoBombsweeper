@@ -20,6 +20,11 @@ func CreateNewGame(rowSize int, colSize int, bombCount int) (error, game.IGame) 
 	}
 
 	createdGame := game.CreateGame(rowSize, colSize)
+	wereBombsAdded := AddBombsToBoard(createdGame, bombCount, rowSize, colSize)
+
+	if !wereBombsAdded {
+		return internalErrors.BuildBombsWereNotAddedToGame(), createdGame
+	}
 
 	return nil, createdGame
 }

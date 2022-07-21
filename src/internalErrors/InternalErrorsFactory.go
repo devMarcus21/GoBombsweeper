@@ -36,3 +36,7 @@ func BuildSpaceAlreadyHasBomb() error {
 func BuildBombSpaceSelected() error {
 	return errors.New("Bomb space selected")
 }
+
+func BuildBombsWereNotAddedToGame() error {
+	return errors.New("Bombs were not added to game")
+}
