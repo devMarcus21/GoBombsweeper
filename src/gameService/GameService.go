@@ -17,7 +17,7 @@ func CreateGameService() *GameService{
 
 func (service *GameService) CreateNewGoBombsweeperGame(row int, col int, bombCount int) (error, string) {
 	gameId := uuid.New()
-	// service.currentGames[gameId] = gameFactory.CreateNewGame(row, col)
+
 	err, gm := gameFactory.CreateNewGame(row, col, bombCount)
 
 	if err == nil {
