@@ -6,9 +6,9 @@ import (
 	"github.com/devMarcus21/GoBombsweeper/src/internalErrors"
 )
 
-type coordinates struct {
-	row int
-	col int
+type Coordinates struct {
+	Row int
+	Col int
 }
 
 func FloodFromSelectedSpot(game game.IGame, row int, col int) (error, bool) {
@@ -22,21 +22,27 @@ func FloodFromSelectedSpot(game game.IGame, row int, col int) (error, bool) {
 		return internalErrors.BuildSpaceAlreadySelected(), false
 	}
 
-	stack := stack.New[coordinates]()
-	
-	addSurroundingPointsToStack(stack, row, col)
+	_, spot := game.GetSpaceState(row, col)
 
-	return floodFillBoardTillStackIsEmpty(game, stack)
+	if spot.GetAdjacentBombs() > 0 {
+		return nil, true
+	}
+
+	stack := stack.New[Coordinates]()
+	
+	AddSurroundingPointsToStack(stack, row, col)
+
+	return FloodFillBoardTillStackIsEmpty(game, stack)
 }
 
-func floodFillBoardTillStackIsEmpty(game game.IGame, stack *stack.Stack[coordinates]) (error, bool) {
+func FloodFillBoardTillStackIsEmpty(game game.IGame, stack *stack.Stack[Coordinates]) (error, bool) {
 	for stack.Len() > 0 {
 		_, curr := stack.Pop()
 
-		e, sp := game.GetSpaceState(curr.row, curr.col)
+		e, sp := game.GetSpaceState(curr.Row, curr.Col)
 
 		if e != nil {
-			if e == internalErrors.BuildInvalidRowIndex(curr.row) || e == internalErrors.BuildInvalidColumnIndex(curr.col) { // if space is out of bounds move on
+			if e.Error() == internalErrors.BuildInvalidRowIndex(curr.Row).Error() || e.Error() == internalErrors.BuildInvalidColumnIndex(curr.Col).Error() { // if space is out of bounds move on
 				continue
 			}
 
@@ -49,23 +55,25 @@ func floodFillBoardTillStackIsEmpty(game game.IGame, stack *stack.Stack[coordina
 
 		if !sp.IsBombspace() {
 			sp.ShowSpace()
-			addSurroundingPointsToStack(stack, curr.row, curr.col)
+			if sp.GetAdjacentBombs() == 0 {
+				AddSurroundingPointsToStack(stack, curr.Row, curr.Col)
+			}
 		}
 	}
 
 	return nil, true
 }
 
-func addSurroundingPointsToStack(stack *stack.Stack[coordinates], row int, col int) {
-	stack.Push(coordinates{row, col-1})
-	stack.Push(coordinates{row, col+1})
+func AddSurroundingPointsToStack(stack *stack.Stack[Coordinates], row int, col int) {
+	stack.Push(Coordinates{row, col-1})
+	stack.Push(Coordinates{row, col+1})
 
-	stack.Push(coordinates{row-1, col-1})
-	stack.Push(coordinates{row-1, col})
-	stack.Push(coordinates{row-1, col+1})
+	stack.Push(Coordinates{row-1, col-1})
+	stack.Push(Coordinates{row-1, col})
+	stack.Push(Coordinates{row-1, col+1})
 
-	stack.Push(coordinates{row+1, col-1})
-	stack.Push(coordinates{row+1, col})
-	stack.Push(coordinates{row+1, col+1})
+	stack.Push(Coordinates{row+1, col-1})
+	stack.Push(Coordinates{row+1, col})
+	stack.Push(Coordinates{row+1, col+1})
 }
 

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	//"github.com/devMarcus21/GoBombsweeper/src/game"
 	"github.com/devMarcus21/GoBombsweeper/src/gameService"
 	"github.com/stretchr/testify/assert"
 )
