@@ -1,9 +1,7 @@
 package gameService
 
 import (
-	"errors"
-
-	"github.com/devMarcus21/Go-Stack"
+	"github.com/devMarcus21/Go-Stack/src/stack"
 	"github.com/devMarcus21/GoBombsweeper/src/game"
 	"github.com/devMarcus21/GoBombsweeper/src/internalErrors"
 )
@@ -28,12 +26,12 @@ func FloodFromSelectedSpot(game game.IGame, row int, col int) (error, bool) {
 	
 	addSurroundingPointsToStack(stack, row, col)
 
-	return floodFillBoardTillStackIsEmpty(stack)
+	return floodFillBoardTillStackIsEmpty(game, stack)
 }
 
-func floodFillBoardTillStackIsEmpty(stack *stack.Stack) (error, bool) {
-	for stack.size() > 0 {
-		curr := stack.Pop()
+func floodFillBoardTillStackIsEmpty(game game.IGame, stack *stack.Stack[coordinates]) (error, bool) {
+	for stack.Len() > 0 {
+		_, curr := stack.Pop()
 
 		e, sp := game.GetSpaceState(curr.row, curr.col)
 
@@ -58,16 +56,16 @@ func floodFillBoardTillStackIsEmpty(stack *stack.Stack) (error, bool) {
 	return nil, true
 }
 
-func addSurroundingPointsToStack(stack *stack.Stack, row int, col int) {
-	stack.Push(row, col-1)
-	stack.Push(row, col+1)
+func addSurroundingPointsToStack(stack *stack.Stack[coordinates], row int, col int) {
+	stack.Push(coordinates{row, col-1})
+	stack.Push(coordinates{row, col+1})
 
-	stack.Push(row-1, col-1)
-	stack.Push(row-1, col)
-	tack.Push(row-1, col+1)
+	stack.Push(coordinates{row-1, col-1})
+	stack.Push(coordinates{row-1, col})
+	stack.Push(coordinates{row-1, col+1})
 
-	stack.Push(row+1, col-1)
-	stack.Push(row+1, col)
-	tack.Push(row+1, col+1)
+	stack.Push(coordinates{row+1, col-1})
+	stack.Push(coordinates{row+1, col})
+	stack.Push(coordinates{row+1, col+1})
 }
 
