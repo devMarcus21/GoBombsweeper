@@ -23,18 +23,18 @@ func TestShouldCreateAGameAndFillPath(t *testing.T) {
 	printBoardView(gm, rowSize, colSize)
 	fmt.Println()
 
-	err, res := gameService.FloodFromSelectedSpot(gm, 1, 1)
+	err, res := gameService.FloodFromSelectedSpot(gm, 1, 1) // make 1st move
 	assert.True(t, res, "Operation successful")
 	assert.Nil(t, err, "No error returned")
 
 	printBoardView(gm, rowSize, colSize) // print board state after 1st move was made
 	fmt.Println()
 
-	err, res = gameService.FloodFromSelectedSpot(gm, 1, 4)
-	assert.True(t, res, "Operation successful")
+	err, res = gameService.FloodFromSelectedSpot(gm, 1, 4) // make 2nd move
+	assert.True(t, res, "Operation successful") // chance these could fail after selecting an already revealed spot will need more verbose end to end testing but for now this is good
 	assert.Nil(t, err, "No error returned")
 
-	printBoardView(gm, rowSize, colSize)
+	printBoardView(gm, rowSize, colSize) // print board state after 2nd move was made
 	fmt.Println()
 }
 
