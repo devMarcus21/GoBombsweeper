@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/devMarcus21/Go-Stack v0.0.0-20220725051032-7bdb0f22ca48 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/objx v0.4.0 // indirect

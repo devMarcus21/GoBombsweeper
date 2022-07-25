@@ -7,4 +7,5 @@ type ISpace interface {
 	GetAdjacentBombs() int
 	IncrementAdjacentBombs() bool
 	String() string
+	IsBombspace() bool
 }

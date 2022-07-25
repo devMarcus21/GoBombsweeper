@@ -38,3 +38,7 @@ func (space *Space) IncrementAdjacentBombs() bool {
 func (space Space) String() string {
 	return strconv.Itoa(space.adjacentBombs)
 }
+
+func (space Space) IsBombspace() bool {
+	return false
+}

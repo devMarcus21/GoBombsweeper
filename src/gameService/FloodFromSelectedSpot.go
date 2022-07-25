@@ -3,6 +3,7 @@ package gameService
 import (
 	"errors"
 
+	"github.com/devMarcus21/Go-Stack"
 	"github.com/devMarcus21/GoBombsweeper/src/game"
 	"github.com/devMarcus21/GoBombsweeper/src/internalErrors"
 )
@@ -10,27 +11,6 @@ import (
 type coordinates struct {
 	row int
 	col int
-}
-
-type stack struct {
-	stack []coordinates
-}
-
-func (stack *stack) push(row int, col int) {
-	stack.stack = append(stack.stack, coordinates{row, col})
-}
-
-func (stack *stack) pop() coordinates {
-	n := len(stack[n]) - 1
-	ret := stack.stack[n]
-
-	stack.stack = stack.stack[:n]
-
-	return ret
-}
-
-func (stack stack) size() coordinates int {
-	return len(stack.stack)
 }
 
 func FloodFromSelectedSpot(game game.IGame, row int, col int) (error, bool) {
@@ -44,35 +24,50 @@ func FloodFromSelectedSpot(game game.IGame, row int, col int) (error, bool) {
 		return internalErrors.BuildSpaceAlreadySelected(), false
 	}
 
-	stack := &stack{}
+	stack := stack.New[coordinates]()
 	
-	AddSurroundingPointsToStack(stack, row, col)
-	
+	addSurroundingPointsToStack(stack, row, col)
+
+	return floodFillBoardTillStackIsEmpty(stack)
+}
+
+func floodFillBoardTillStackIsEmpty(stack *stack.Stack) (error, bool) {
 	for stack.size() > 0 {
-		curr := stack.pop()
+		curr := stack.Pop()
 
 		e, sp := game.GetSpaceState(curr.row, curr.col)
 
 		if e != nil {
-			// TODO implement this. Broken state!
+			if e == internalErrors.BuildInvalidRowIndex(curr.row) || e == internalErrors.BuildInvalidColumnIndex(curr.col) { // if space is out of bounds move on
+				continue
+			}
+
+			return e, false
 		}
 
-		AddSurroundingPointsToStack(stack, curr.row, curr.col)
+		if sp.IsRevealed() {
+			continue
+		}
+
+		if !sp.IsBombspace() {
+			sp.ShowSpace()
+			addSurroundingPointsToStack(stack, curr.row, curr.col)
+		}
 	}
 
 	return nil, true
 }
 
-func AddSurroundingPointsToStack(stack *stack, row int, col int) {
-	stack.push(row, col-1)
-	stack.push(row, col+1)
+func addSurroundingPointsToStack(stack *stack.Stack, row int, col int) {
+	stack.Push(row, col-1)
+	stack.Push(row, col+1)
 
-	stack.push(row-1, col-1)
-	stack.push(row-1, col)
-	tack.push(row-1, col+1)
+	stack.Push(row-1, col-1)
+	stack.Push(row-1, col)
+	tack.Push(row-1, col+1)
 
-	stack.push(row+1, col-1)
-	stack.push(row+1, col)
-	tack.push(row+1, col+1)
+	stack.Push(row+1, col-1)
+	stack.Push(row+1, col)
+	tack.Push(row+1, col+1)
 }
 
