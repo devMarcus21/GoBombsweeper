@@ -3,7 +3,7 @@ module github.com/devMarcus21/GoBombsweeper
 go 1.18
 
 require (
-	github.com/devMarcus21/Go-Stack v0.0.0-20220725051032-7bdb0f22ca48
+	github.com/devMarcus21/Go-Stack v1.0.0
 	github.com/google/uuid v1.3.0
 	github.com/stretchr/testify v1.8.0
 )

@@ -1,8 +1,8 @@
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/devMarcus21/Go-Stack v0.0.0-20220725051032-7bdb0f22ca48 h1:I0ORT04Pm5GiyPQ2OWtT4SX99AQcfrUHiz1jQilpnmA=
-github.com/devMarcus21/Go-Stack v0.0.0-20220725051032-7bdb0f22ca48/go.mod h1:RfH052mkE0Jg5WEyqsg2LnbwI817hoZCNV6yztagkRI=
+github.com/devMarcus21/Go-Stack v1.0.0 h1:Ab/4RmXLWdi8cG6ScEel8qTgJzsSTiUfuLBHmgVxYaQ=
+github.com/devMarcus21/Go-Stack v1.0.0/go.mod h1:RfH052mkE0Jg5WEyqsg2LnbwI817hoZCNV6yztagkRI=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
