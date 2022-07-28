@@ -44,3 +44,7 @@ func BuildBombsWereNotAddedToGame() error {
 func BuildSpaceAlreadySelected() error {
 	return errors.New("Space already selected")
 }
+
+func BuildGameIdDoesNotExist(gameId string) error {
+	return errors.New("Game id does not exist: " + gameId)
+}
