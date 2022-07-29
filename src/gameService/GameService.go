@@ -36,3 +36,12 @@ func (service *GameService) MakeMoveOnBoardById(id string, row int, col int) (er
 
 	return FloodFromSelectedSpot(game, row, col)
 }
+
+func (service GameService) GetGameStateById(id string) (error, [][]game.ISpace) {
+	game, gameFound := service.currentGames[id]
+	if !gameFound {
+		return internalErrors.BuildGameIdDoesNotExist(id), nil
+	}
+
+	return nil, game.GetBoardState()
+}
