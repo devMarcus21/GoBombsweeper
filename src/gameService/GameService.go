@@ -17,6 +17,11 @@ type GameDataResponse struct {
 	GameWon  bool
 }
 
+type SpaceData struct {
+	AdjacentBombs int
+	Revealed      bool
+}
+
 func CreateGameService() *GameService {
 	return &GameService{make(map[string]game.IGame)}
 }
@@ -61,6 +66,25 @@ func (service GameService) GetGameDataById(id string) (error, GameDataResponse) 
 
 	resp.Gameover = game.HasGameFinished()
 	resp.GameWon = game.GameWon()
+
+	board := game.GetBoardState()
+
+	boardOfAny := make([][]any, len(board))
+
+	// Bad need to fix
+	for row := range board {
+		boardOfAny[row] = make([]any, len(board[row]))
+
+		for col := range board[row] {
+			if board[row][col].IsRevealed() {
+				boardOfAny[row][col] = SpaceData{board[row][col].GetAdjacentBombs(), board[row][col].IsRevealed()}
+			} else {
+				boardOfAny[row][col] = SpaceData{0, board[row][col].IsRevealed()}
+			}
+		}
+	}
+
+	resp.Board = boardOfAny
 
 	return nil, resp
 }
