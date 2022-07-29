@@ -27,6 +27,7 @@ func main() {
 	})
 
 	r.POST("/game/create", CreateGame)
+	r.GET("/game/:gameId", GetGameStateById)
 
 	r.Run(":3000")
 }
@@ -56,4 +57,22 @@ func CreateGame(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"id": gameId,
 	})
+}
+
+func GetGameStateById(c *gin.Context) {
+	gameId := c.Param("gameId")
+
+	if err, gameData := service.GetGameDataById(gameId); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Game could not be retrieved",
+			"error":   err.Error(),
+		})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"id":       gameId,
+			"board":    gameData.Board,
+			"gameover": gameData.Gameover,
+			"gameWon":  gameData.GameWon,
+		})
+	}
 }

@@ -11,6 +11,12 @@ type GameService struct {
 	currentGames map[string]game.IGame
 }
 
+type GameDataResponse struct {
+	Board    [][]any
+	Gameover bool
+	GameWon  bool
+}
+
 func CreateGameService() *GameService {
 	return &GameService{make(map[string]game.IGame)}
 }
@@ -44,4 +50,17 @@ func (service GameService) GetGameStateById(id string) (error, [][]game.ISpace) 
 	}
 
 	return nil, game.GetBoardState()
+}
+
+func (service GameService) GetGameDataById(id string) (error, GameDataResponse) {
+	resp := GameDataResponse{}
+	game, gameFound := service.currentGames[id]
+	if !gameFound {
+		return internalErrors.BuildGameIdDoesNotExist(id), resp
+	}
+
+	resp.Gameover = game.HasGameFinished()
+	resp.GameWon = game.GameWon()
+
+	return nil, resp
 }
