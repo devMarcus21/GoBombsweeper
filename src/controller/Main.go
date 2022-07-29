@@ -14,6 +14,12 @@ type createGameRequestBody struct {
 	BombCount int `json:"bombCount"`
 }
 
+type makeMoveRequestBody struct {
+	GameId string `json:"gameId"`
+	Row    int    `json:"row"`
+	Col    int    `json:"col"`
+}
+
 var service *gameService.GameService = gameService.CreateGameService()
 
 func main() {
@@ -28,6 +34,7 @@ func main() {
 
 	r.POST("/game/create", CreateGame)
 	r.GET("/game/:gameId", GetGameStateById)
+	r.POST("/game", MakeMoveOnBoardById)
 
 	r.Run(":3000")
 }
@@ -74,5 +81,29 @@ func GetGameStateById(c *gin.Context) {
 			"gameover": gameData.Gameover,
 			"gameWon":  gameData.GameWon,
 		})
+	}
+}
+
+func MakeMoveOnBoardById(c *gin.Context) {
+	requestBody := makeMoveRequestBody{}
+	if err := c.BindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid params",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	if err, result := service.MakeMoveOnBoardById(requestBody.GameId, requestBody.Row, requestBody.Col); result {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "success",
+		})
+		return
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid move",
+			"error":   err.Error(),
+		})
+		return
 	}
 }
