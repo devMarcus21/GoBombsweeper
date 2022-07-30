@@ -66,41 +66,33 @@ func (service *GameService) GetGameDataById(id string) (error, GameDataResponse)
 		return internalErrors.BuildGameIdDoesNotExist(id), resp
 	}
 
-	resp.Gameover = gm.HasGameFinished()
-
 	board := gm.GetBoardState()
 
 	boardOfAny := make([][]any, len(board))
 
-	allBombsFound := true
-	//fmt.Println(allBombsFound)
+	allSpacesFound := true
 
-	// Bad need to fix
+	// Bad logic need to fix
 	for row := range board {
 		boardOfAny[row] = make([]any, len(board[row]))
 
 		for col := range board[row] {
 			if board[row][col].IsRevealed() {
-				//fmt.Println(fmt.Sprintf("%T", board[row][col]) == fmt.Sprintf("%T", game.Space{}))
 				boardOfAny[row][col] = SpaceData{board[row][col].GetAdjacentBombs(), board[row][col].IsRevealed()}
 			} else {
-				//fmt.Println(fmt.Sprintf("%T", board[row][col]) == fmt.Sprintf("%T", game.Space{}))
-				if fmt.Sprintf("%T", board[row][col]) == fmt.Sprintf("%T", game.Space{}) {
-					allBombsFound = false
+				if fmt.Sprintf("%T", board[row][col]) == fmt.Sprintf("%T", &game.Space{}) {
+					allSpacesFound = false
 				}
 				boardOfAny[row][col] = SpaceData{0, board[row][col].IsRevealed()}
 			}
 		}
 	}
 
-	//fmt.Println(allBombsFound)
-
-	if !allBombsFound {
+	if allSpacesFound {
 		gm.SetGameWon()
-		//fmt.Println(gm.GameWon())
 	}
-	//fmt.Println(gm.GameWon())
 	resp.GameWon = gm.GameWon()
+	resp.Gameover = gm.HasGameFinished()
 	resp.Board = boardOfAny
 
 	return nil, resp
