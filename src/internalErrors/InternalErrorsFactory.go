@@ -48,3 +48,7 @@ func BuildSpaceAlreadySelected() error {
 func BuildGameIdDoesNotExist(gameId string) error {
 	return errors.New("Game id does not exist: " + gameId)
 }
+
+func BuildGameover() error {
+	return errors.New("Gameover")
+}

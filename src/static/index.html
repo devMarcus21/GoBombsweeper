@@ -31,9 +31,9 @@
             </form>
             <form>  
                 <div class="container">    
-                    <input type="text" placeholder="Row index" name="rowSize" required>  
-                    <input type="password" placeholder="Col index" name="colSize" required>
-                    <button type="submit">Submit move</button> 
+                    <input type="text" placeholder="Row index" id="rowIndex" required>  
+                    <input type="text" placeholder="Col index" id="colIndex" required>
+                    <button type="submit" id="submitMove">Submit move</button> 
                 </div>   
             </form>
 
@@ -54,13 +54,11 @@
                 document.getElementById('newGame').addEventListener("click", function(e) {
                     e.preventDefault();
 
+                    emptyBoard();
+
                     const rowSize = document.getElementById("rowSize").value;
                     const colSize = document.getElementById("colSize").value;
                     const bombCount = document.getElementById("bombCount").value;
-
-                    console.log(rowSize);
-                    console.log(colSize);
-                    console.log(bombCount);
 
                     fetch('http://localhost:3000/game/create', {
                         method: 'POST',
@@ -74,14 +72,47 @@
                             "bombCount": ""+bombCount
                         })
                     }).then((response) => {
-                        console.log(response)
-                        return response.json()
+                        console.log(response);
+                        return response.json();
                     }).then((data) => {
                         console.log('Success:', data);
                         console.log("state "+state.id);
                         state.id = data.id;
                         console.log("state "+state.id);
                         getBoardState();
+                    });
+                });
+
+                document.getElementById('submitMove').addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    emptyBoard();
+
+                    const rowIndex = document.getElementById("rowIndex").value;
+                    const colIndex = document.getElementById("colIndex").value;
+
+                    fetch('http://localhost:3000/game', {
+                        method: 'POST',
+                        crossOrigin: null,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "gameId": state.id,
+                            "row": ""+rowIndex,
+                            "col": ""+colIndex
+                        })
+                    }).then((response) => {
+                        console.log(response)
+                        return response.json()
+                    }).then((data) => {
+                        if (data.error != null) {
+                            console.log('error:', data);
+                            getBoardState();
+                        } else {
+                            console.log('success:', data);
+                            getBoardState();
+                        }
                     });
                 });
 
@@ -98,8 +129,13 @@
                     
 
                 getBoardState()
+
+                function emptyBoard() {
+                    var Table = document.getElementById("html-data-table");
+                    Table.innerHTML = "";
+                }
                 
-                function renderDataInTheTable({board}) {
+                function renderDataInTheTable({ board }) {
                     const mytable = document.getElementById("html-data-table");
                     board.forEach(todo => {
                         let newRow = document.createElement("tr");

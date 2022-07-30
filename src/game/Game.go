@@ -4,9 +4,9 @@ import "github.com/devMarcus21/GoBombsweeper/src/internalErrors"
 
 // Implements IGame interface
 type Game struct {
-	board [][]ISpace
-	done  bool
-	won   bool
+	board     [][]ISpace
+	done      bool
+	won       bool
 	rowLength int
 	colLength int
 }
@@ -31,6 +31,10 @@ func (game *Game) SelectAtIndex(row int, col int) (error, bool) {
 	}
 	if game.colLength <= col || col < 0 {
 		return internalErrors.BuildInvalidColumnIndex(col), false
+	}
+
+	if game.done {
+		return internalErrors.BuildGameover(), false
 	}
 
 	if game.board[row][col].IsRevealed() {
