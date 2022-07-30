@@ -1,6 +1,8 @@
 package game
 
-import "github.com/devMarcus21/GoBombsweeper/src/internalErrors"
+import (
+	"github.com/devMarcus21/GoBombsweeper/src/internalErrors"
+)
 
 // Implements IGame interface
 type Game struct {
@@ -44,6 +46,10 @@ func (game *Game) SelectAtIndex(row int, col int) (error, bool) {
 	err := game.board[row][col].ShowSpace()
 
 	if err != nil {
+		if err.Error() == internalErrors.BuildBombSpaceSelected().Error() {
+			game.done = true
+			return err, false
+		}
 		return err, false
 	}
 
