@@ -111,3 +111,9 @@ func (game *Game) GetBoardState() [][]ISpace {
 func (game *Game) GetBoardDimensions() (int, int) {
 	return game.rowLength, game.colLength
 }
+
+func (game *Game) SetGameWon() bool {
+	game.done = true
+	game.won = true
+	return true
+}

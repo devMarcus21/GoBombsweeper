@@ -9,4 +9,5 @@ type IGame interface {
 	IncrementAdjacentBombsAtIndex(int, int) (error, bool)
 	GetSpaceState(int, int) (error, ISpace)
 	SelectAtIndex(int, int) (error, bool)
+	SetGameWon() bool
 }

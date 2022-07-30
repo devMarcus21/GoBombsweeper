@@ -52,3 +52,7 @@ func BuildGameIdDoesNotExist(gameId string) error {
 func BuildGameover() error {
 	return errors.New("Gameover")
 }
+
+func BuildGameWon() error {
+	return errors.New("Game won")
+}

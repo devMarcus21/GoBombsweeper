@@ -1,6 +1,8 @@
 package gameService
 
 import (
+	"fmt"
+
 	"github.com/devMarcus21/GoBombsweeper/src/game"
 	"github.com/devMarcus21/GoBombsweeper/src/gameFactory"
 	"github.com/devMarcus21/GoBombsweeper/src/internalErrors"
@@ -57,19 +59,21 @@ func (service GameService) GetGameStateById(id string) (error, [][]game.ISpace) 
 	return nil, game.GetBoardState()
 }
 
-func (service GameService) GetGameDataById(id string) (error, GameDataResponse) {
+func (service *GameService) GetGameDataById(id string) (error, GameDataResponse) {
 	resp := GameDataResponse{}
-	game, gameFound := service.currentGames[id]
+	gm, gameFound := service.currentGames[id]
 	if !gameFound {
 		return internalErrors.BuildGameIdDoesNotExist(id), resp
 	}
 
-	resp.Gameover = game.HasGameFinished()
-	resp.GameWon = game.GameWon()
+	resp.Gameover = gm.HasGameFinished()
 
-	board := game.GetBoardState()
+	board := gm.GetBoardState()
 
 	boardOfAny := make([][]any, len(board))
+
+	allBombsFound := true
+	//fmt.Println(allBombsFound)
 
 	// Bad need to fix
 	for row := range board {
@@ -77,13 +81,26 @@ func (service GameService) GetGameDataById(id string) (error, GameDataResponse) 
 
 		for col := range board[row] {
 			if board[row][col].IsRevealed() {
+				//fmt.Println(fmt.Sprintf("%T", board[row][col]) == fmt.Sprintf("%T", game.Space{}))
 				boardOfAny[row][col] = SpaceData{board[row][col].GetAdjacentBombs(), board[row][col].IsRevealed()}
 			} else {
+				//fmt.Println(fmt.Sprintf("%T", board[row][col]) == fmt.Sprintf("%T", game.Space{}))
+				if fmt.Sprintf("%T", board[row][col]) == fmt.Sprintf("%T", game.Space{}) {
+					allBombsFound = false
+				}
 				boardOfAny[row][col] = SpaceData{0, board[row][col].IsRevealed()}
 			}
 		}
 	}
 
+	//fmt.Println(allBombsFound)
+
+	if !allBombsFound {
+		gm.SetGameWon()
+		//fmt.Println(gm.GameWon())
+	}
+	//fmt.Println(gm.GameWon())
+	resp.GameWon = gm.GameWon()
 	resp.Board = boardOfAny
 
 	return nil, resp
