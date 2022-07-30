@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            td,
+            th {
+                border: 1px solid #000000;
+                text-align: left;
+                padding: 8px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class=header>
+            GoBombSweeper
+        </div>
+        <div class=contents>
+            <form>  
+                <div class="container">    
+                    <input type="text" placeholder="Row size" id="rowSize" required>  
+                    <input type="text" placeholder="Column size" id="colSize" required>
+                    <input type="text" placeholder="Number of bombs" id="bombCount" required>  
+                    <button type="submit" id="newGame">New Game</button> 
+                </div>   
+            </form>
+            <form>  
+                <div class="container">    
+                    <input type="text" placeholder="Row index" name="rowSize" required>  
+                    <input type="password" placeholder="Col index" name="colSize" required>
+                    <button type="submit">Submit move</button> 
+                </div>   
+            </form>
+
+            <div id="data-table">
+                <table id="html-data-table">
+                    <tr>
+                        
+                    </tr>
+                </table>    
+            </div>
+
+            <script type="text/javascript" charset="utf-8">
+
+                let state = {
+                    id: ""
+                }
+
+                document.getElementById('newGame').addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    const rowSize = document.getElementById("rowSize").value;
+                    const colSize = document.getElementById("colSize").value;
+                    const bombCount = document.getElementById("bombCount").value;
+
+                    console.log(rowSize);
+                    console.log(colSize);
+                    console.log(bombCount);
+
+                    fetch('http://localhost:3000/game/create', {
+                        method: 'POST',
+                        crossOrigin: null,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "row": ""+rowSize,
+                            "col": ""+colSize,
+                            "bombCount": ""+bombCount
+                        })
+                    }).then((response) => {
+                        console.log(response)
+                        return response.json()
+                    }).then((data) => {
+                        console.log('Success:', data);
+                        console.log("state "+state.id);
+                        state.id = data.id;
+                        console.log("state "+state.id);
+                        getBoardState();
+                    });
+                });
+
+                console.log(state);
+
+                const getBoardState = () => fetch('http://localhost:3000/game/' + state.id)
+                    .then((response) => {
+                        console.log(response)
+                        return response.json()
+                    }).then((data) => {
+                        console.log('Success:', data);
+                        renderDataInTheTable(data);
+                    });
+                    
+
+                getBoardState()
+                
+                function renderDataInTheTable({board}) {
+                    const mytable = document.getElementById("html-data-table");
+                    board.forEach(todo => {
+                        let newRow = document.createElement("tr");
+                        Object.values(todo).forEach((value) => {
+                            let cell = document.createElement("td");
+                            if (value.Revealed) {
+                                cell.innerText = value.AdjacentBombs;
+                            } else {
+                                cell.innerText = "#";
+                            }
+                            newRow.appendChild(cell);
+                        })
+                        mytable.appendChild(newRow);
+                    });
+                }
+        
+            </script>
+        </div>
+    </body>
+</html>
