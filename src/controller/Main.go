@@ -30,6 +30,9 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 
+	// path is relative from where application is ran not where file is
+	r.Static("/play", "./src/static")
+
 	r.GET("/status", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "active",
