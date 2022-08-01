@@ -71,10 +71,14 @@
                             "col": ""+colSize,
                             "bombCount": ""+bombCount
                         })
-                    }).then((response) => {
-                        console.log(response);
-                        return response.json();
-                    }).then((data) => {
+                    }).then(
+                        (response) => response.json()
+                    ).then((data) => {
+                        if (data.error != undefined) {
+                            console.log('Error: ', data);
+                            alert(data.error);
+                            return
+                        }
                         console.log('Success:', data);
                         console.log("state "+state.id);
                         state.id = data.id;
@@ -102,10 +106,9 @@
                             "row": ""+rowIndex,
                             "col": ""+colIndex
                         })
-                    }).then((response) => {
-                        console.log(response)
-                        return response.json()
-                    }).then((data) => {
+                    }).then(
+                        (response) => response.json()
+                    ).then((data) => {
                         if (data.error != null) {
                             console.log('error:', data);
                             alert(data.error);
@@ -117,14 +120,18 @@
                     });
                 });
 
-                console.log(state);
-
                 const getBoardState = () => fetch('http://localhost:3000/game/' + state.id)
-                    .then((response) => {
-                        console.log(response)
-                        return response.json()
-                    }).then((data) => {
+                    .then(
+                        (response) => response.json()
+                    ).then((data) => {
                         console.log('Success:', data);
+                        if (data.gameover) {
+                            if (data.gameWon) {
+                                alert('You win');
+                            } else {
+                                alert('You lose');
+                            }
+                        }
                         renderDataInTheTable(data);
                     });
                     

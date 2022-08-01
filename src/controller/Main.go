@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -55,10 +54,6 @@ func CreateGame(c *gin.Context) {
 		})
 		return
 	}
-
-	fmt.Println(requestBody.Row)
-	fmt.Println(requestBody.Col)
-	fmt.Println(requestBody.BombCount)
 
 	var gameId string
 
